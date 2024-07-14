@@ -1,0 +1,32 @@
+name: Flutter Android Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # trigger on a button click
+
+jobs:
+  flutter-android-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.10.6"
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
